@@ -1,0 +1,146 @@
+ Guía para Consumir APIs Públicas
+
+Este repositorio ofrece ejemplos de cómo consumir diferentes APIs públicas, con instrucciones claras para su implementación en tus proyectos. A lo largo de este documento, encontrarás:
+
+- Qué son las APIs públicas.
+- Cómo encontrar APIs.
+- Ejemplos de consumo de APIs utilizando Python.
+- Buenas prácticas al trabajar con APIs.
+
+---
+
+ Índice
+
+1. [¿Qué son las APIs Públicas?](#qué-son-las-apis-públicas)
+2. [¿Dónde Encontrar APIs Públicas?](#dónde-encontrar-apis-públicas)
+3. [Ejemplos de Consumo de APIs](#ejemplos-de-consumo-de-apis)
+   1. [OpenWeatherMap API (Clima)](#openweathermap-api-clima)
+   2. [CoinGecko API (Criptomonedas)](#coingecko-api-criptomonedas)
+   3. [NewsAPI (Noticias)](#newsapi-noticias)
+4. [Buenas Prácticas al Consumir APIs](#buenas-prácticas-al-consumir-apis)
+5. [Licencia](#licencia)
+
+---
+
+ ¿Qué son las APIs Públicas?
+
+Una **API Pública** es un conjunto de reglas y protocolos que permiten que diferentes aplicaciones se comuniquen entre sí. Las APIs públicas permiten que desarrolladores externos interactúen con servicios de terceros, como obtener datos de clima, precios de criptomonedas, noticias, entre otros.
+
+Estas APIs generalmente requieren una clave de acceso (API Key) para usarlas, lo que ayuda a controlar el acceso y el uso de la API.
+
+---
+
+ ¿Dónde Encontrar APIs Públicas?
+
+Existen múltiples plataformas y repositorios donde puedes encontrar APIs públicas de diferentes categorías:
+
+- [RapidAPI](https://rapidapi.com/) - Un mercado de APIs donde puedes buscar y probar varias APIs.
+- [ProgrammableWeb](https://www.programmableweb.com/) - Un directorio completo de APIs públicas.
+- [Public APIs](https://public-apis.xyz/) - Repositorio con APIs gratuitas y públicas.
+- [GitHub - Public APIs Repository](https://github.com/public-apis/public-apis) - Repositorio de GitHub con APIs mantenidas por la comunidad.
+
+---
+
+Ejemplos de Consumo de APIs
+
+A continuación, se muestran ejemplos prácticos de cómo consumir algunas APIs populares utilizando **Python**. Para realizar estas solicitudes, necesitarás la librería `requests`.
+
+ Instalación de Requests
+
+Si no tienes la librería `requests` instalada, puedes instalarla usando pip:
+
+```bash
+pip install requests
+
+
+---
+
+import requests
+
+Definir la URL de la API
+url = "http://api.openweathermap.org/data/2.5/weather"
+params = {
+    "q": "Madrid",  # Ciudad
+    "appid": "tu_api_key",  # Reemplaza con tu clave
+    "units": "metric"  # Unidades métricas
+}
+
+ Realizar la solicitud GET
+response = requests.get(url, params=params)
+
+ Comprobar el estado de la respuesta
+if response.status_code == 200:
+    data = response.json()
+    print(f"Temperatura en Madrid: {data['main']['temp']}°C")
+else:
+    print("Error al obtener los datos")
+
+
+---
+
+Código para obtener precios de criptomonedas
+
+
+import requests
+
+ URL de la API CoinGecko
+url = "https://api.coingecko.com/api/v3/simple/price"
+params = {
+    "ids": "bitcoin,ethereum",  # Criptomonedas que deseas consultar
+    "vs_currencies": "usd"  # Moneda de comparación
+}
+
+ Realizar la solicitud GET
+response = requests.get(url, params=params)
+
+ Comprobar el estado de la respuesta
+if response.status_code == 200:
+    data = response.json()
+    bitcoin_price = data['bitcoin']['usd']
+    ethereum_price = data['ethereum']['usd']
+    print(f"Precio de Bitcoin: ${bitcoin_price}")
+    print(f"Precio de Ethereum: ${ethereum_price}")
+else:
+    print("Error al obtener los datos")
+
+
+---
+
+Código para obtener titulares de noticias
+import requests
+
+ Definir la URL de la API
+url = "https://newsapi.org/v2/top-headlines"
+params = {
+    "country": "us",  # País de origen de las noticias
+    "apiKey": "tu_api_key"  # Reemplaza con tu clave
+}
+ Realizar la solicitud GET
+response = requests.get(url, params=params)
+
+ Comprobar el estado de la respuesta
+if response.status_code == 200:
+    data = response.json()
+    for article in data['articles']:
+        print(f"Título: {article['title']}")
+        print(f"Descripción: {article['description']}")
+        print("----")
+else:
+    print("Error al obtener los datos")
+
+
+---
+Buenas Prácticas al Consumir APIs
+Cuando trabajas con APIs públicas, es importante seguir algunas buenas prácticas para asegurar que tu código sea eficiente y escalable:
+
+1. Manejo de Errores
+Siempre verifica el código de estado de la respuesta (status_code) antes de procesar los datos. En el caso de un error, maneja el error adecuadamente.
+
+2. Uso de Caché
+Si tu aplicación consume una API repetidamente, es recomendable almacenar en caché las respuestas para evitar hacer demasiadas solicitudes al servidor y mejorar el rendimiento.
+
+3. Optimización de Llamadas
+Algunas APIs tienen límites en la cantidad de solicitudes que puedes hacer por minuto. Utiliza técnicas como la paginación y caché para optimizar las llamadas.
+
+4. Autenticación Segura
+Utiliza claves API y sigue las recomendaciones de seguridad al usar autenticación. No expongas tus claves en el código fuente.
